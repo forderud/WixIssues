@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ProductName="WinFormsApp" ?>
+  <?define Company="Private" ?>
+
+  <?if $(var.Platform) = x64 ?>
+    <?define PlatformProgramFilesFolder="ProgramFiles64Folder" ?>
+  <?else ?>
+    <?define PlatformProgramFilesFolder="ProgramFilesFolder" ?>
+  <?endif ?>
+  
+  <?define ExeName="WinFormsApp.dll" ?>
+  <!-- Determine WinFormsApp.dll version based on file Id from Files.wxs -->
+  <?define VERSION=!(bind.FileVersion.filD635F47DA59C18DAF7E57E85FBC233BA) ?>
+
+  <!-- UpgradeCode MUST be unique for each app. Change UpgradeCode between major releases to allow side-by-side installations. -->
+  <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.VERSION)" Manufacturer="$(var.Company)" UpgradeCode="0F211A90-F7E3-4C2D-AD4D-D163C56737CB">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Description="WinForms-based test application" />
+
+    <!-- Installer default folder & type -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+
+    <!-- Disable downgrades, prevent side-by-side installations of same version -->
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes"/>
+    <!-- Embed binaries inside MSI instead of separate CAB files -->
+    <MediaTemplate EmbedCab="yes"/>
+
+    <Feature Id="ProductFeature" Title="Application" Level="1">
+      <ComponentGroupRef Id="FileList" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <!-- Default installation folder structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="PlatformProgramFilesFolder">
+        <Directory Id="COMPANYFOLDER" Name="$(var.Company)">
+          <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)" />
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>
