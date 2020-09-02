@@ -42,7 +42,7 @@ namespace WinFormsApp
         }
 
         /** Entry-poing for adding ADDITIONAL registry entries (in addition to "InProcServer32" and "ThreadingModel"). */
-        [ComRegisterFunction()]
+        [ComRegisterFunction]
         public static void RegisterClass(Type t)
         {
             // Add additional registry keys
@@ -58,7 +58,7 @@ namespace WinFormsApp
         }
 
         /** Entry-poing for removing ADDITIONAL registry entries. */
-        [ComUnregisterFunction()]
+        [ComUnregisterFunction]
         public static void UnregisterClass(Type t)
         {
             foreach (RegEntry e in ExtraRegKeys(t)) {
